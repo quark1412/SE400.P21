@@ -5,9 +5,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const auth = proxy("http://localhost:8081");
-const products = proxy("http://localhost:8082");
-const orders = proxy("http://localhost:8083");
+const auth = proxy("http://user:8081");
+const products = proxy("http://product:8082");
+const orders = proxy("http://order:8083");
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/products", products);

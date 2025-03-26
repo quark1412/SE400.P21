@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   mongodb:
     image: mongo:latest
@@ -7,6 +6,21 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - app-network
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - user
+      - product
+      - order
 
   user:
     build:
@@ -14,6 +28,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+    networks:
+      - app-network
     restart: always
     depends_on:
       - "mongodb"
@@ -26,6 +42,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:8082"
+    networks:
+      - app-network
     depends_on:
       - "mongodb"
     environment:
@@ -37,21 +55,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8083"
+    networks:
+      - app-network
     depends_on:
       - "mongodb"
     environment:
       - NODE_ENV=production
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    ports:
-      - "85:85"
-    depends_on:
-      - user
-      - product
-      - order
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   mongo-data:
