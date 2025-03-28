@@ -41,6 +41,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/auth", proxy(env.USER_SERVICE_URL));
 app.use("/api/v1/product", proxy(env.PRODUCT_SERVICE_URL));
+app.use("/api/v1/order", proxy(env.ORDER_SERVICE_URL));
 
 app.listen(PORT, () => {
   logger.info(`API Gateway is running on port ${PORT}`);
@@ -49,5 +50,8 @@ app.listen(PORT, () => {
   );
   logger.info(
     `Product service is running on port ${env.PRODUCT_SERVICE_URL}`
+  );
+  logger.info(
+    `Order service is running on port ${env.ORDER_SERVICE_URL}`
   );
 });
