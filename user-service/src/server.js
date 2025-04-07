@@ -9,6 +9,7 @@ import logger from "./utils/logger.js";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import mongoose from "mongoose";
 import userRoute from "./routes/userRoute.js";
+import passport from "passport";
 
 const app = express();
 const PORT = env.PORT || 8081;
@@ -16,6 +17,7 @@ const PORT = env.PORT || 8081;
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(passport.initialize());
 
 await mongoose
   .connect(env.MONGODB_URL)
@@ -23,10 +25,6 @@ await mongoose
   .catch((e) => logger.error("Mongo connection error", e));
 
 const redisClient = new Redis(env.REDIS_URL);
-
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
 
 app.use((req, res, next) => {
   logger.info(`Received ${req.method} request to ${req.url}`);

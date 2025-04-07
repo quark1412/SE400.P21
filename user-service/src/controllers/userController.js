@@ -9,11 +9,24 @@ const signup = async (req, res) => {
 
     let user = await User.findOne({ $or: [{ email }, { username }] });
 
-    if (user) {
+    if (user && user.password) {
       logger.warn("User already exists");
       return res.status(400).json({
         success: false,
         message: "User already exists",
+      });
+    }
+
+    if (user) {
+      logger.info("User saved successfully", user._id);
+      const { accessToken, refreshToken } = await generateTokens(user);
+      user.password = password;
+      await user.save();
+      return res.status(201).json({
+        success: true,
+        message: "User registered successfully!",
+        accessToken,
+        refreshToken,
       });
     }
 
@@ -30,7 +43,7 @@ const signup = async (req, res) => {
       refreshToken,
     });
   } catch (e) {
-    logger.error("Registration error occured", e);
+    logger.error("Registration error occurred", e);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -69,7 +82,7 @@ const login = async (req, res) => {
     });
     logger.info("User logged in successfully", user._id);
   } catch (e) {
-    logger.error("Login error occured", e);
+    logger.error("Login error occurred", e);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -130,7 +143,7 @@ const refreshTokenUser = async (req, res) => {
     });
     logger.info("User refreshed successfully", user._id);
   } catch (e) {
-    logger.error("Refresh token error occured", e);
+    logger.error("Refresh token error occurred", e);
     res.status(500).json({
       success: false,
       message: "Internal server error",

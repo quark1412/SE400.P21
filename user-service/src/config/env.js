@@ -10,6 +10,8 @@ const {
   REFRESH_TOKEN_SECRET,
   NODE_ENV,
   REDIS_URL,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 } = process.env;
 
 export default {
@@ -19,4 +21,6 @@ export default {
   REFRESH_TOKEN_SECRET,
   NODE_ENV,
   REDIS_URL,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 };
