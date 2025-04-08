@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/refreshToken.js";
+import env from "../config/env.js";
 
 const generateTokens = async (user) => {
   const accessToken = jwt.sign(
