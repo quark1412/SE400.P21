@@ -20,7 +20,7 @@ await mongoose
   .then(() => logger.info("Connected to mongodb"))
   .catch((e) => logger.error("Mongo connection error", e));
 
-const redisClient = new Redis(process.env.REDIS_URL);
+const redisClient = new Redis(env.REDIS_URL);
 
 app.use(helmet());
 app.use(cors());
