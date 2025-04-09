@@ -7,12 +7,12 @@ const getAllProducts = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const startIndex = (page - 1) * limit;
 
-    const products = await Post.find({})
+    const products = await Product.find({})
       .sort({ createdAt: -1 })
       .skip(startIndex)
       .limit(limit);
 
-    const totalProducts = await Post.countDocuments();
+    const totalProducts = await Product.countDocuments();
     res.status(200).json({
       products,
       currentPage: page,
@@ -21,6 +21,7 @@ const getAllProducts = async (req, res, next) => {
     });
     logger.info("Products fetched successfully", products);
   } catch (error) {
+    console.log(error.message)
     logger.error("Error fetching products", error);
     res.status(500).json({
       success: false,
@@ -43,10 +44,10 @@ const getProductById = async (req, res, next) => {
     res.status(200).json(product);
     logger.info("Product fetched successfully", product);
   } catch (error) {
-    logger.error("Error fetching post by ID", error);
+    logger.error("Error fetching Product by ID", error);
     res.status(500).json({
       success: false,
-      message: "Error fetching post by ID",
+      message: "Error fetching Product by ID",
     });
   }
 };
