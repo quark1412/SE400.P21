@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.use("/api/v1/order", orderRoute);
+app.use("/", orderRoute);
 
 app.listen(PORT, () => {
   logger.info(`Order service running on port ${PORT}`);

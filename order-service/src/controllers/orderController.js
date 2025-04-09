@@ -1,5 +1,7 @@
 import logger from "../utils/logger.js";
 import Order from "../models/order.js";
+import env from "../config/env.js";
+import axios from "axios";
 
 const getAllOrders = async (req, res, next) => {
   try {
@@ -19,7 +21,7 @@ const getAllOrders = async (req, res, next) => {
       totalPages: Math.ceil(totalOrders / limit),
       totalOrders: totalOrders,
     });
-    logger.info("Orders fetched successfully", products);
+    logger.info("Orders fetched successfully", orders);
   } catch (error) {
     logger.error("Error fetching orders", error);
     res.status(500).json({
@@ -56,10 +58,21 @@ const createOrder = async (req, res, next) => {
 
     let total = 0;
     for (let index = 0; index < orderItems.length; index++) {
-      total += orderItems[index].price;
+      const response = await axios.get(
+        `${env.API_GATEWAY_URL}/api/v1/product/${orderItems[index].productId}`
+      );
+      total += response.data.price * orderItems[index].quantity;
     }
 
-    const order = new Order(userId, total, shippingFee, orderItems);
+    const finalPrice = total + parseInt(shippingFee);
+
+    const order = new Order({
+      userId,
+      total,
+      shippingFee,
+      finalPrice,
+      orderItems,
+    });
     await order.save();
     res.status(201).json(order);
     logger.info("Order created successfully", order);

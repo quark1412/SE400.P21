@@ -10,6 +10,7 @@ const {
   REFRESH_TOKEN_SECRET,
   NODE_ENV,
   REDIS_URL,
+  API_GATEWAY_URL
 } = process.env;
 
 export default {
@@ -19,4 +20,5 @@ export default {
   REFRESH_TOKEN_SECRET,
   NODE_ENV,
   REDIS_URL,
+  API_GATEWAY_URL
 };
