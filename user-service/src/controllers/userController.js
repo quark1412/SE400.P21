@@ -53,8 +53,8 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { email, username, password } = req.body;
+    const user = await User.findOne({ $or: [{ email }, { username }] });
 
     if (!user) {
       logger.warn("Invalid user");
