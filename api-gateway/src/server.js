@@ -39,9 +39,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/v1/auth", proxy(env.USER_SERVICE_URL));
-app.use("/api/v1/product", proxy(env.PRODUCT_SERVICE_URL));
-app.use("/api/v1/order", proxy(env.ORDER_SERVICE_URL));
+app.use("/", proxy(env.USER_SERVICE_URL));
+app.use("/", proxy(env.PRODUCT_SERVICE_URL));
+app.use("/", proxy(env.ORDER_SERVICE_URL));
 
 app.listen(PORT, () => {
   logger.info(`API Gateway is running on port ${PORT}`);
