@@ -18,7 +18,8 @@ passport.use(
         if (!user) {
           user = new User({
             email: profile.emails[0].value,
-            username: profile.displayName,
+            username: profile.emails[0].value,
+            avatarPath: profile.photos[0].value,
           });
           await user.save();
         }
