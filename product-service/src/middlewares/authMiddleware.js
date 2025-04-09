@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import env from "../config/env.js";
+import logger from "../utils/logger.js"
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
