@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     });
 });
 
-app.use("/api/v1/product", productRoute);
+app.use("/", productRoute);
 
 app.listen(PORT, () => {
   logger.info(`Product service running on port ${PORT}`);

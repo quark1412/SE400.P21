@@ -63,8 +63,8 @@ const sensitiveEndpointsLimiter = rateLimit({
   }),
 });
 
-app.use("/api/v1/auth/signup", sensitiveEndpointsLimiter);
-app.use("/api/v1/auth", userRoute);
+app.use("/signup", sensitiveEndpointsLimiter);
+app.use("/", userRoute);
 
 app.listen(PORT, () => {
   logger.info(`User service running on port ${PORT}`);
