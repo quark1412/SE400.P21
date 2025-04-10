@@ -7,6 +7,7 @@ import { rateLimit } from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 import logger from "./utils/logger.js";
 import proxy from "express-http-proxy";
+import authMiddleware from "./middlewares/authMiddleware.js";
 
 const app = express();
 const PORT = env.PORT || 8080;
@@ -40,18 +41,34 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v1/auth", proxy(env.USER_SERVICE_URL));
-app.use("/api/v1/product", proxy(env.PRODUCT_SERVICE_URL));
-app.use("/api/v1/order", proxy(env.ORDER_SERVICE_URL));
+app.use(
+  "/api/v1/product",
+  authMiddleware,
+  proxy(env.PRODUCT_SERVICE_URL, {
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      if (srcReq.user)
+        proxyReqOpts.headers["x-user-id"] = srcReq.user.userId;
+
+      return proxyReqOpts;
+    },
+  })
+);
+app.use(
+  "/api/v1/order",
+  authMiddleware,
+  proxy(env.ORDER_SERVICE_URL, {
+    proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+      if (srcReq.user)
+        proxyReqOpts.headers["x-user-id"] = srcReq.user.userId;
+
+      return proxyReqOpts;
+    },
+  })
+);
 
 app.listen(PORT, () => {
   logger.info(`API Gateway is running on port ${PORT}`);
-  logger.info(
-    `User service is running on port ${env.USER_SERVICE_URL}`
-  );
-  logger.info(
-    `Product service is running on port ${env.PRODUCT_SERVICE_URL}`
-  );
-  logger.info(
-    `Order service is running on port ${env.ORDER_SERVICE_URL}`
-  );
+  logger.info(`User service is running on port ${env.USER_SERVICE_URL}`);
+  logger.info(`Product service is running on port ${env.PRODUCT_SERVICE_URL}`);
+  logger.info(`Order service is running on port ${env.ORDER_SERVICE_URL}`);
 });
