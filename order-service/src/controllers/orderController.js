@@ -59,7 +59,7 @@ const createOrder = async (req, res, next) => {
     let total = 0;
     for (let index = 0; index < orderItems.length; index++) {
       const response = await axios.get(
-        `${env.API_GATEWAY_URL}/api/v1/product/${orderItems[index].productId}`
+        `${env.API_GATEWAY_URL}/api/v1/product/public/${orderItems[index].productId}`
       );
       total += response.data.price * orderItems[index].quantity;
     }

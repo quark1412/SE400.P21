@@ -3,8 +3,8 @@ import express from "express";
 import cors from "cors";
 import Redis from "ioredis";
 import helmet from "helmet";
-import {rateLimit} from "express-rate-limit";
-import {RedisStore} from "rate-limit-redis";
+import { rateLimit } from "express-rate-limit";
+import { RedisStore } from "rate-limit-redis";
 import logger from "./utils/logger.js";
 import { RateLimiterRedis } from "rate-limiter-flexible";
 import mongoose from "mongoose";
@@ -64,7 +64,14 @@ const sensitiveEndpointsLimiter = rateLimit({
 });
 
 app.use("/signup", sensitiveEndpointsLimiter);
-app.use("/", userRoute);
+app.use(
+  "/",
+  (req, res, next) => {
+    req.redisClient = redisClient;
+    next();
+  },
+  userRoute
+);
 
 app.listen(PORT, () => {
   logger.info(`User service running on port ${PORT}`);

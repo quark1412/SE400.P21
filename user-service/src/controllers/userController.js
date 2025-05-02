@@ -102,7 +102,7 @@ const refreshTokenUser = async (req, res) => {
     }
 
     const storedToken = await RefreshToken.findOne({ token: refreshToken });
-    
+
     if (!storedToken) {
       logger.warn("Invalid refresh token provided");
       return res.status(400).json({
@@ -134,7 +134,6 @@ const refreshTokenUser = async (req, res) => {
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
       await generateTokens(user);
 
-    
     await RefreshToken.deleteOne({ _id: storedToken._id });
 
     res.status(200).json({
@@ -162,7 +161,7 @@ const logout = async (req, res) => {
       });
     }
 
-   const storedToken = await RefreshToken.findOneAndDelete({
+    const storedToken = await RefreshToken.findOneAndDelete({
       token: refreshToken,
     });
     if (!storedToken) {
@@ -187,9 +186,33 @@ const logout = async (req, res) => {
   }
 };
 
+const loginGoogleSuccess = async (req, res, next) => {
+  try {
+    const token = req.body.token;
+    const data = await req.redisClient.get(token);
+
+    if (!data) {
+      logger.warn("Token expired!");
+      return res.status(403).json({
+        message: "Token expired!",
+      });
+    }
+
+    logger.info("Xác thực token thành công!");
+    return res.status(200).json({ data: JSON.parse(data) });
+  } catch (error) {
+    logger.error("Error during Google login success", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 export default {
   signup,
   login,
   refreshTokenUser,
   logout,
-}
+  loginGoogleSuccess,
+};

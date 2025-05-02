@@ -34,9 +34,7 @@ passport.use(
           { new: true }
         );
 
-        const { accessToken, refreshToken } = await generateTokens(user);
-
-        done(null, { accessToken, refreshToken });
+        done(null, user);
       } catch (err) {
         console.log(err.message);
         done(null, false);
