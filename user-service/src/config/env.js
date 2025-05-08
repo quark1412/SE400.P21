@@ -12,6 +12,7 @@ const {
   REDIS_URL,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  URL_CLIENT,
 } = process.env;
 
 export default {
@@ -23,4 +24,5 @@ export default {
   REDIS_URL,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  URL_CLIENT,
 };

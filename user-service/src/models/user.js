@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
     },
     avatarPath: {
       type: String,
+      default: "https://example.com/default-avatar.png",
     },
     password: {
       type: String,

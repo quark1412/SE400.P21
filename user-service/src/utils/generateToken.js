@@ -7,6 +7,7 @@ const generateTokens = async (user) => {
     {
       userId: user._id,
       username: user.username,
+      avatarPath: user.avatarPath,
     },
     env.ACCESS_TOKEN_SECRET,
     { expiresIn: "60m" }
@@ -16,6 +17,7 @@ const generateTokens = async (user) => {
     {
       userId: user._id,
       username: user.username,
+      avatarPath: user.avatarPath,
     },
     env.REFRESH_TOKEN_SECRET,
     { expiresIn: "7d" }

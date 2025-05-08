@@ -3,6 +3,7 @@ import userController from "../controllers/userController.js";
 import passport from "../middlewares/passport.js";
 import generateTokens from "../utils/generateToken.js";
 import bcrypt from "bcrypt";
+import env from "../config/env.js";
 
 const router = express.Router();
 
@@ -35,7 +36,7 @@ router.get(
         JSON.stringify({ accessToken, refreshToken })
       );
 
-      res.redirect(`${process.env.URL_CLIENT}/loginGoogle/success/${token}`);
+      res.redirect(`${env.URL_CLIENT}/loginGoogle/success/${token}`);
     } catch (error) {
       console.error("Error during Google login callback:", error);
       res
